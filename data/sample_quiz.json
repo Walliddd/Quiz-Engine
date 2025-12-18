@@ -1,0 +1,17 @@
+{
+    "title": "Sample Quiz",
+    "difficulty": "Easy",
+    "questions": [
+                    {
+                        "question": "What is the capital of France?",
+                        "options": ["Madrid", "Cologne", "Paris", "Rome"],
+                        "id": 0,
+                        "correctOption": 2,
+                        "explanation": "Paris is the capital of France since 508 CE",
+                        "points": 1,
+                        "penalty": -1,
+                        "time_limit": 30,
+                        "category": "Geography"
+                    }
+                ]
+}
