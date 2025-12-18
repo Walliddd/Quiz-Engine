@@ -1,0 +1,41 @@
+{
+    "title": "Astronomy",
+    "difficulty": "Easy",
+    "questions": [
+                    {
+                        "question": "What is the largest planet in the solar system?",
+                        "options": ["Saturn", "Jupiter", "Neptune", "Mars"],
+                        "id": 0,
+                        "correctOption": 1,
+                        "explanation": "Jupiter has a mass 2.5 times greater than that of all the other planets combined",
+                        "points": 10,
+                        "penalty": 5,
+                        "time_limit": 20,
+                        "category": "Science"
+                    },
+
+                    {
+                        "question": "Who was the first man to walk on the Moon?",
+                        "options": ["Yuri Gagarin", "Buzz Aldrin", "Neil Armstrong", "Michael Collins"],
+                        "id": 1,
+                        "correctOption": 2,
+                        "explanation": "It occured during the Apollo 11 mission in 1969",
+                        "points": 5,
+                        "penalty": 5,
+                        "time_limit": 15,
+                        "category": "Science"
+                    },
+
+                    {
+                        "question": "Which planet is nicknamed the 'Red Planet'?",
+                        "options": ["Venus", "Mars", "Mercury", "Saturn"],
+                        "id": 2,
+                        "correctOption": 1,
+                        "explanation": "The red color is due to the iron oxide on its surface",
+                        "points": 5,
+                        "penalty": 2,
+                        "time_limit": 15,
+                        "category": "Science"
+                    }
+                ]
+}
