@@ -1,0 +1,53 @@
+{
+    "title": "Syntax and basic Python concepts.",
+    "difficulty": "Easy",
+    "questions": [
+                    {
+                        "question": "What keyword is used to define a function?",
+                        "options": ["func", "define", "def", "function"],
+                        "id": 0,
+                        "correctOption": 2,
+                        "explanation": "'def' is short for define",
+                        "points": 10,
+                        "penalty": 5,
+                        "time_limit": 20,
+                        "category": "Programming"
+                    },
+
+                    {
+                        "question": "What is the correct extension of Python files?",
+                        "options": [".pt", ".py", ".pyt", ".pw"],
+                        "id": 1,
+                        "correctOption": 1,
+                        "explanation": "Python source files always use the '.py' extension",
+                        "points": 5,
+                        "penalty": 2,
+                        "time_limit": 15,
+                        "category": "Programming"
+                    },
+
+                    {
+                        "question": "How do you write a comment on a single line?",
+                        "options": ["//", "/*", "-", "#"],
+                        "id": 2,
+                        "correctOption": 3,
+                        "explanation": "The hash symbol indicates the beginning of a comment in Python.",
+                        "points": 5,
+                        "penalty": 2,
+                        "time_limit": 15,
+                        "category": "Programming"
+                    },
+
+                    {
+                        "question": "Which of these is not a standard data type in Python?",
+                        "options": ["Array", "List", "Dictionary", "Tuple"],
+                        "id": 3,
+                        "correctOption": 0,
+                        "explanation": "In basic Python, you use Lists; Arrays require modules like 'array' or 'numpy'",
+                        "points": 15,
+                        "penalty": 10,
+                        "time_limit": 25,
+                        "category": "Programming"
+                    }
+                ]
+}
