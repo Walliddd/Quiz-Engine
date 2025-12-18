@@ -1,0 +1,29 @@
+{
+    "title": "Tough questions, high penalties, and short time.",
+    "difficulty": "Hard",
+    "questions": [
+                    {
+                        "question": "What year was Python 1.0 released?",
+                        "options": ["1991", "1994", "2000", "1989"],
+                        "id": 0,
+                        "correctOption": 1,
+                        "explanation": "Although development began in 1989, version 1.0 was released in January 1994.",
+                        "points": 50,
+                        "penalty": 30,
+                        "time_limit": 10,
+                        "category": "Computer History"
+                    },
+
+                    {
+                        "question": "What is the result of 3 * (1 + 2) ** 2?",
+                        "options": ["81", "27", "18", "45"],
+                        "id": 1,
+                        "correctOption": 1,
+                        "explanation": "Following the precedence: (1+2)=3, then 3**2=9, finally 3*9=27",
+                        "points": 40,
+                        "penalty": 40,
+                        "time_limit": 10,
+                        "category": "Logic"
+                    }
+                ]
+}
