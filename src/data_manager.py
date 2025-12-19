@@ -10,7 +10,12 @@ def load_quiz_file():
 
     for filename in all_files:
         if filename.endswith(".json"):
-            quiz_files.append(filename)
+            data = load_quiz_data(filename)
+            is_valid = is_valid_quiz(data)
+            if is_valid_quiz:
+                quiz_files.append(filename)
+            else:
+                print(f"[INFO] Skipping invalid quiz file: filename")
 
     return quiz_files # restituisce i file json (in una lista) nella cartella dati
 
