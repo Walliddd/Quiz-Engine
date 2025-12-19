@@ -24,28 +24,44 @@ def load_quiz_data(filename):
     
 def is_valid_quiz(data):
 
-    quiz_is_valid = False
+    if type(data) is not dict:
+        return False
+    
+    if "title" not in data:
+        return False
+    
+    if "questions" not in data:
+        return False
+    
+    if not isinstance(data["questions"], list):
+        return False
+    
+    for question in data["questions"]:
+        if not isinstance(question, dict):
+            return False
+            
+        if "question" not in question:
+            return False
 
-    if type(data) is dict:
-        if "title" in data:
+        if not isinstance(question["question"], str):
+            return False
 
-            if "questions" in data:
-                if isinstance(data["questions"], list):
+        if "options" not in question:
+            return False
 
-                    for question in data["questions"]:
-
-                        if type(question) is dict:
-
-                            if "question" in question:
-                                if isinstance(question["question"], str):
-
-                                    if "options" in question:
-                                        if isinstance(question["options"], list) and len(question["options"])>=2:
-
-                                            if "correctOption" in question and (question["correctOption"] >= 0 and question["correctOption"] <= len(question["options"])):
-                                                if isinstance(question["correctOption"], int):
-                                                    quiz_is_valid = True
-                                                else:
-                                                    quiz_is_valid = False
-                                                    
-    return quiz_is_valid
+        if not isinstance(question["options"], list):
+            return False
+        
+        if not (len(question["options"]) >= 2):
+            return False
+        
+        if "correctOption" not in question:
+            return False
+        
+        if not isinstance(question["correctOption"], int):
+            return False
+        
+        if not (0 <= question["correctOption"] < len(question["options"])):
+            return False
+    
+    return True
