@@ -52,4 +52,17 @@ def print_header():
 
 def display_question(question_data: Dict, question_number: int, total_questions: int):
     print("-" * 35)
-    print(f"")
+    print(f"Question {question_number} of {total_questions} | Points {question_data.get("points", 1)}")
+    print("-" * 35)
+
+    print(f"\n{question_data["question"]}\n")
+
+    options = question_data["options"]
+    letters_uppercase = string.ascii_uppercase
+
+    for index, option in enumerate(options):
+        if index < len(letters_uppercase):
+            letter = letters_uppercase[index]
+            print(f"{letter}. {option}")
+        else:
+            print(f"[ERROR] Index '{index} out of range A-Z'")
