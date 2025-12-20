@@ -1,4 +1,5 @@
-from src.ui_terminal import display_question
+from src.ui_terminal import display_question, get_answer
+
 def run_quiz(quiz_data):
     match_status = {
 
@@ -14,3 +15,9 @@ def run_quiz(quiz_data):
 
     for question in quiz_data["questions"]:
         display_question(question)
+
+        user_answer = get_answer()
+        correct_answer = question["correctOption"]
+
+        
+

@@ -66,3 +66,13 @@ def display_question(question_data: Dict, question_number: int, total_questions:
             print(f"{letter}. {option}")
         else:
             print(f"[ERROR] Index '{index} out of range A-Z'")
+
+def get_answer():
+    while True:
+        answer = input("Your answer (A, B, C, ...): ").strip().upper()
+
+        if not answer:
+            print("[WARN] Input cannot be empty. Please try again.")
+            continue
+
+        return answer
