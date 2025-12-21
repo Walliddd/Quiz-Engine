@@ -1,4 +1,4 @@
-from src.ui_terminal import display_question, get_answer, clear_screen
+from src.ui_terminal import display_question, get_answer, clear_screen, print_header
 import string
 
 def run_quiz(quiz_data):
@@ -21,16 +21,10 @@ def run_quiz(quiz_data):
         user_answer = get_answer()
         correct_answer = question["correctOption"]
 
-        letter_to_index = {}
-
-        for index in range(len(option_list)):
-            if index < len(string.ascii_uppercase):
-                letter = string.ascii_uppercase[index]
-                letter_to_index[letter] = index
-            else:
-                break
-
-        user_index = letter_to_index.get(user_answer, -1)
+        try:
+            user_index = string.ascii_uppercase().index(user_answer)
+        except ValueError:
+            user_index = -1
 
         if user_index == correct_answer:
             match_status["correct_answers"] += 1
@@ -45,4 +39,20 @@ def run_quiz(quiz_data):
 
             print(f"Too bad! Your answer wasn't correct! It was the option '{option_list[correct_answer]}'")
 
-def show_results():
+    return match_status
+
+def show_results(match_status):
+    clear_screen()
+    print_header()
+    print("\n-","-" *34)
+    print("Quiz Completed!")
+    print("-" * 35)
+
+    print(f"\n- Total Score: {match_status["score"]}")
+    print(f"- Correct Answers: {match_status["correct_answers"]}/{match_status["total_questions"]}")
+    print(f"- Incorrect Answers: {match_status["incorrect_answers"]}/{match_status["total_questions"]}")
+
+    if match_status["correct_answers"] > match_status["incorrect_answers"]:
+        print(f"\nGood job!")
+    else:
+        print(f"\nToo bad, try again!")
