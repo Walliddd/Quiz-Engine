@@ -22,7 +22,7 @@ def run_quiz(quiz_data):
         correct_answer = question["correctOption"]
 
         try:
-            user_index = string.ascii_uppercase().index(user_answer)
+            user_index = string.ascii_uppercase.index(user_answer)
         except ValueError:
             user_index = -1
 
@@ -39,6 +39,9 @@ def run_quiz(quiz_data):
 
             print(f"Too bad! Your answer wasn't correct! It was the option '{option_list[correct_answer]}'")
 
+    input("\nPress Enter to proceed...")
+    show_results(match_status)
+
     return match_status
 
 def show_results(match_status):
@@ -52,7 +55,18 @@ def show_results(match_status):
     print(f"- Correct Answers: {match_status["correct_answers"]}/{match_status["total_questions"]}")
     print(f"- Incorrect Answers: {match_status["incorrect_answers"]}/{match_status["total_questions"]}")
 
-    if match_status["correct_answers"] > match_status["incorrect_answers"]:
-        print(f"\nGood job!")
+    if match_status["total_questions"] > 0:
+        percentual = (match_status["correct_answers"] / match_status["total_questions"]) * 100
+    else:
+        percentual = 0.0
+
+    if percentual >= 90:
+        print(f"\nExcellent! Amazing performance! You're an expert")
+    elif percentual >= 70:
+        print(f"\nGood job! You have a solid understanding of the topic.")
+    elif percentual >= 50:
+        print(f"\nDecent. There's room for improvement, but you're over the halfway mark")
+    elif percentual >= 30:
+        print(f"You need to see some key concepts.")
     else:
         print(f"\nToo bad, try again!")
