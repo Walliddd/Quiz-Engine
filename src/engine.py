@@ -1,5 +1,7 @@
-from src.ui_terminal import display_question, get_answer, clear_screen, print_header
+from src.ui_terminal import display_question, get_answer, clear_screen, print_header, get_username
 import string
+from datetime import datetime
+from src.storage import save_leaderboard, load_leaderboard
 
 def run_quiz(quiz_data):
     match_status = {
@@ -41,6 +43,22 @@ def run_quiz(quiz_data):
 
     input("\nPress Enter to proceed...")
     show_results(match_status)
+
+    input("\nPress Enter to proceed...")
+    username = get_username()
+    current_date_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    score_record = {
+        "username": username,
+        "score": match_status["score"],
+        "quiz_name": quiz_data["title"],
+        "date": current_date_str
+    }
+
+    all_leaderboard_data = load_leaderboard()
+
+    all_leaderboard_data.append(score_record)
+    save_leaderboard(all_leaderboard_data)
 
     return match_status
 

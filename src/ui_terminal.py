@@ -17,7 +17,7 @@ def get_user_choice(max_option):
 
         selection_str = input(f"\nSelect a quiz (1 - {max_option}): ").strip()
 
-        if not selection:
+        if not selection_str:
             print("[WARN] Input cannot be empty. Please try again.")
             continue
 
@@ -76,3 +76,29 @@ def get_answer():
             continue
 
         return answer
+    
+def get_username():
+    while True:
+        clear_screen()
+        print_header()
+
+        username = input(f"Insert your Username: ")
+
+        if not username:
+            print("[WARN] Input cannot be empty. Please try again.")
+            continue
+
+        return username
+    
+def print_top_10(top_10_list):
+    clear_screen()
+    print_header()
+
+    if not top_10_list:
+        print(f"No results found on the Leaderboard.")
+        return
+    
+    print(f"\n--- LEADERBOARD TOP 10 FOR {top_10_list[0]["quiz_name"]} ---")
+
+    for index, record in enumerate(top_10_list):
+        print(f"\n{index + 1} - {record["username"]} - {record["quiz_name"]} - {record["score"]} - {record["date"]}")

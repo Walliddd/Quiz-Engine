@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from src.ui_terminal import print_top_10
 
 def _get_storage_path():
     script_path = Path(__file__).resolve()
@@ -41,3 +42,18 @@ def save_leaderboard(data_list):
         print("[SUCCESS] Leaderboard data saved successfully.")
     except Exception as e:
         print(f"[ERROR] Could not save Leaderboard data: {e}")
+
+def display_top_10(quiz_name_filter):
+    all_scores = load_leaderboard()
+
+    filtered_scores = []
+
+    for record in all_scores:
+        if record["quiz_name"] == quiz_name_filter:
+            filtered_scores.append(record)
+
+    sorted_scores = sorted(filtered_scores, key = lambda item: item["score"], reverse = True)
+
+    top_10 = sorted_scores[:10]
+
+    print_top_10(top_10)
