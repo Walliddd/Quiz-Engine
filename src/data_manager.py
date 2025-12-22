@@ -1,5 +1,6 @@
 import json
 import os
+from src.colors import color_blue, color_cyan, color_green, color_magenta, color_red, color_yellow
 
 def load_quiz_file():
     directory = "data"
@@ -15,7 +16,9 @@ def load_quiz_file():
             if is_valid_quiz:
                 quiz_files.append(filename)
             else:
-                print(f"[INFO] Skipping invalid quiz file: filename")
+                info = color_cyan("[INFO]")
+                message = f"Skipping invalid quiz file: {filename}"
+                print(f"{info} {message}")
 
     return quiz_files # restituisce i file json (in una lista) nella cartella dati
 

@@ -2,6 +2,7 @@ from src.ui_terminal import display_question, get_answer, clear_screen, print_he
 import string
 from datetime import datetime
 from src.storage import save_leaderboard, load_leaderboard
+from src.colors import color_blue, color_cyan, color_green, color_magenta, color_red, color_yellow
 
 def run_quiz(quiz_data):
     match_status = {
@@ -33,13 +34,13 @@ def run_quiz(quiz_data):
             points = question["points"]
             match_status["score"] += points
 
-            print(f"\nCongratulations! Your answer is correct! \nExplanation: {question["explanation"]}")
+            print(color_green(f"\nCongratulations! Your answer is correct! \nExplanation: {question["explanation"]}"))
         else:
             match_status["incorrect_answers"] += 1
             penalty = question.get("penalty", 0)
             match_status["score"] -= penalty
 
-            print(f"Too bad! Your answer wasn't correct! It was the option '{option_list[correct_answer]}'")
+            print(color_magenta(f"Too bad! Your answer wasn't correct! It was the option '{option_list[correct_answer]}'"))
 
     input("\nPress Enter to proceed...")
     show_results(match_status)
@@ -65,9 +66,9 @@ def run_quiz(quiz_data):
 def show_results(match_status):
     clear_screen()
     print_header()
-    print("\n-","-" *34)
+    print(color_blue("\n-"),color_blue("-") *34)
     print("Quiz Completed!")
-    print("-" * 35)
+    print(color_blue("-") * 35)
 
     print(f"\n- Total Score: {match_status["score"]}")
     print(f"- Correct Answers: {match_status["correct_answers"]}/{match_status["total_questions"]}")

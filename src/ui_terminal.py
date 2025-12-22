@@ -2,6 +2,7 @@ import os
 import platform
 from typing import List, Dict
 import string
+from src.colors import color_red, color_green, color_yellow, color_blue, color_cyan, color_magenta
 
 def print_welcome():
     pass
@@ -18,7 +19,9 @@ def get_user_choice(max_option):
         selection_str = input(f"\nSelect a quiz (1 - {max_option}): ").strip()
 
         if not selection_str:
-            print("[WARN] Input cannot be empty. Please try again.")
+            warn = color_yellow("[WARN]")
+            message = "Input cannot be empty. Please try again."
+            print(f"{warn} {message}")
             continue
 
         try:
@@ -27,9 +30,13 @@ def get_user_choice(max_option):
             if selection >= 1 and selection <= max_option:
                 return selection
             else:
-                print(f"[ERROR] Your choice is out of range.")
+                message = "Your choice is out of range."
+                error = color_red("[ERROR]")
+                print(f"{error} {message}")
         except ValueError:
-            print(f"[ERROR] '{selection_str}' is not a valid integer. Please enter only digits.")
+            message = f"'{selection_str}' is not a valid integer. Please enter only digits."
+            error = color_red("[ERROR]")
+            print(f"{error} {message}")
 
 def clear_screen():
     if platform.system() == "Windows":
@@ -49,11 +56,12 @@ def print_header():
   ▀█████▄▄▀██▀█▄██▄▄██▄▄         ▀█████▄██ ▀█▄▀████▄██▄██ ▀█▄▀█▄▄▄
        ▀█                                        ██               
                                                ▀▀▀                """
+    print(color_cyan(header))
 
 def display_question(question_data: Dict, question_number: int, total_questions: int):
-    print("-" * 35)
+    print(color_blue("-") * 35)
     print(f"Question {question_number} of {total_questions} | Points {question_data.get("points", 1)}")
-    print("-" * 35)
+    print(color_blue("-") * 35)
 
     print(f"\n{question_data["question"]}\n")
 
@@ -65,7 +73,9 @@ def display_question(question_data: Dict, question_number: int, total_questions:
             letter = letters_uppercase[index]
             print(f"{letter}. {option}")
         else:
-            print(f"[ERROR] Index '{index} out of range A-Z'")
+            message = f"Index '{index}' out of range A-Z"
+            error = color_red("[ERROR]")
+            print(f"{error} {message}")
 
 def get_answer():
     while True:
@@ -85,7 +95,9 @@ def get_username():
         username = input(f"Insert your Username: ")
 
         if not username:
-            print("[WARN] Input cannot be empty. Please try again.")
+            warn = color_yellow("[WARN]")
+            message = "Input cannot be empty. Please try again."
+            print("{warn} {message}")
             continue
 
         return username
@@ -98,7 +110,7 @@ def print_top_10(top_10_list):
         print(f"No results found on the Leaderboard.")
         return
     
-    print(f"\n--- LEADERBOARD TOP 10 FOR {top_10_list[0]["quiz_name"]} ---")
+    print(color_blue(f"\n--- LEADERBOARD TOP 10 FOR {top_10_list[0]["quiz_name"]} ---"))
 
     for index, record in enumerate(top_10_list):
         print(f"\n{index + 1} - {record["username"]} - {record["quiz_name"]} - {record["score"]} - {record["date"]}")

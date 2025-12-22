@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 from src.ui_terminal import print_top_10
+from src.colors import color_yellow, color_blue, color_cyan, color_green, color_magenta, color_red
 
 def _get_storage_path():
     script_path = Path(__file__).resolve()
@@ -13,7 +14,9 @@ def load_leaderboard():
     leaderboard_file = _get_storage_path()
 
     if not leaderboard_file.exists():
-        print(f"[INFO] The file containing the Leaderboard data does not exist.")
+        message = "The file containing the Leaderboard data does not exist."
+        info = color_cyan("[INFO]")
+        print(f"{info} {message}")
         return []
     
     try:
@@ -24,7 +27,9 @@ def load_leaderboard():
                 return data
             
     except json.JSONDecodeError:
-        print("The file containing the Leaderboard appears to be corrupted.")
+        error = "[ERROR]"
+        message = "The file containing the Leaderboard appears to be corrupted."
+        print("{error} {message}")
 
         return []
     
@@ -39,9 +44,13 @@ def save_leaderboard(data_list):
         with leaderboard_file.open("w") as f:
             json.dump(data_list, f, indent=4)
 
-        print("[SUCCESS] Leaderboard data saved successfully.")
+        message = "Leaderboard data saved successfully."
+        success = color_green("[SUCCESS]")
+        print("{success} {message}")
     except Exception as e:
-        print(f"[ERROR] Could not save Leaderboard data: {e}")
+        error = color_red("[ERROR]")
+        message = f"Could not save Leaderboard data: {e}"
+        print(f"{error} {message}")
 
 def display_top_10(quiz_name_filter):
     all_scores = load_leaderboard()
