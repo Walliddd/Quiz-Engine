@@ -7,13 +7,15 @@ def load_quiz_file():
 
     quiz_files = []
 
+    ensure_data_directory("data")
+
     all_files = os.listdir(directory)
 
     for filename in all_files:
         if filename.endswith(".json"):
             data = load_quiz_data(filename)
             is_valid = is_valid_quiz(data)
-            if is_valid_quiz:
+            if is_valid:
                 quiz_files.append(filename)
             else:
                 info = color_cyan("[INFO]")
@@ -73,3 +75,6 @@ def is_valid_quiz(data):
             return False
     
     return True
+
+def ensure_data_directory(directory_name):
+    os.makedirs(directory_name, exist_ok = True)

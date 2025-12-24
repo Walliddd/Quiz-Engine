@@ -10,6 +10,11 @@ def print_welcome():
 def show_menu(quiz_list):
     for quiz in quiz_list:
         print(f"[{quiz["id"]}] {quiz["title"]}")
+    
+    max_quiz_id = len(quiz_list)
+    print(f"[C] Create New Quiz")
+
+    return max_quiz_id
 
 def get_user_choice(max_option):
     while True:
@@ -23,6 +28,9 @@ def get_user_choice(max_option):
             message = "Input cannot be empty. Please try again."
             print(f"{warn} {message}")
             continue
+
+        if selection_str.upper() == "C":
+            return "C"
 
         try:
             selection = int(selection_str)
@@ -45,8 +53,8 @@ def clear_screen():
     else:
         os.system("clear")
 
-def print_header():
-    header = """ # ascii art font name: 'Classy'
+def print_header(): # ascii art font name: 'Classy'
+    header = """
                                                                   
    ▄▄▄▄                         ▄▄▄▄▄▄▄                           
  ▄█▀▀███▄▄                     █▀██▀▀▀                            

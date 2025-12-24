@@ -66,7 +66,7 @@ def run_quiz(quiz_data):
 def show_results(match_status):
     clear_screen()
     print_header()
-    print(color_blue("\n-"),color_blue("-") *34)
+    print(color_blue("\n-") + color_blue("-") *34)
     print("Quiz Completed!")
     print(color_blue("-") * 35)
 
