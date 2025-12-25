@@ -146,4 +146,58 @@ def collect_options_with_limit():
         if len(options) >= max_options:
             print(color_yellow(f"\nYou reached the max limit of {max_options} Options."))
             break
-        prompt = f""
+
+        prompt = f"Insert the Option #{len(options) + 1}: "
+        new_option = get_validated_text(prompt, "The option cannot be empty.")
+        options.append(new_option)
+
+        if len(options) >= min_options:
+            add_more = input("Do you want to add another option? (y/n): ").strip().lower()
+            if add_more == "n":
+                break
+        
+    if len(options) < min_options:
+        print(color_red(f"[ERROR] At least {min_options} are required."))
+        return collect_options_with_limit()
+    
+    return options
+
+def collect_and_validate_index(option_number):
+    print(color_blue(f"The input must be between 1 and {option_number}."))
+
+    while True:
+        input_str = input(f"Insert the index of the correct answer (e.g. 1, 2, ...): ")
+
+        try:
+            user_choice_base1 = int(input_str)
+        except ValueError:
+            print(color_red(f"Invalid input. Enter an integer."))
+            continue
+
+        python_index = user_choice_base1 - 1
+
+        if 0 <= python_index < option_number:
+            print(color_green(f"[SUCCESS] The converted index is valid."))
+
+            return python_index
+        
+        else:
+            print(color_red("[ERROR] The number is an integer, but it's out of options range"))
+            continue
+
+def collect_and_validate_int(prompt, error_msg, allow_zero):
+    while True:
+        input_str = input(prompt)
+
+        try:
+            value = int(input_str)
+        except ValueError:
+            print(color_red("[ERROR] You must insert a valid integer number."))
+            continue
+
+        if allow_zero == False:
+            if value <= 0:
+                print(color_red(f"[ERROR] The value must be strictly positive (>0)."))
+                continue
+
+        return value
