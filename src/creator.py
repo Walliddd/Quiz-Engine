@@ -1,5 +1,5 @@
 import json
-import pathlib
+from pathlib import Path
 from src.colors import color_red, color_green, color_yellow, color_blue
 from src.ui_terminal import clear_screen, print_header
 from src.data_manager import ensure_data_directory
@@ -60,6 +60,8 @@ def run_quiz_creator():
     
     quiz_complete = add_questions(new_quiz_data)
 
+    saved_path = save_quiz_to_file(new_quiz_data)
+
     return new_quiz_data
 
 def add_questions(quiz_data):
@@ -102,7 +104,7 @@ def collect_question_details(quiz_data):
 
         correct_index = collect_and_validate_index(option_number = len(option_list))
 
-        explanation = collect_and_validate_text("Insert the Answer Explanation: ")
+        explanation = get_validated_text("Insert the Answer Explanation: ")
 
         points = collect_and_validate_int("Points to be assigned (e.g. 10): ")
 
@@ -201,3 +203,63 @@ def collect_and_validate_int(prompt, error_msg, allow_zero):
                 continue
 
         return value
+    
+def collect_and_validate_index(option_number):
+    instructions = f"The correct answer is one of {option_number} options. Insert the number (1 to {option_number}): "
+
+    while True:
+        input_str = input(instructions)
+
+        try:
+            choice_base1 = int(input_str)
+        except ValueError:
+            print(color_red("[ERROR] Invalid input. Insert integers only."))
+            continue
+
+        python_index = choice_base1 - 1
+
+        if 0 <= python_index < option_number:
+            print(color_green(f"[SUCCESS] Correct index registered."))
+
+            return python_index
+        else:
+            print(color_red(f"Choice out of range. It must be between 1 and {option_number}"))
+            continue
+
+def sanitize_title_for_filename(title):
+    sanitized = title.lower()
+
+    sanitized = sanitized.replace(" ", "-")
+
+    prohibited_chars = ["/", "\\", ":", "*", "?", "\"", "<", ">", "|"]
+
+    for char in prohibited_chars:
+        sanitized = sanitized.replace(char, "")
+
+    sanitized = sanitized.replace("--", "-")
+
+    sanitized = sanitized.strip("-")
+
+    filename = sanitized + ".json"
+
+    return filename
+
+def save_quiz_to_file(quiz_data):
+    title = quiz_data.get("title", "untitled_quiz")
+
+    filename = sanitize_title_for_filename(title)
+
+    file_path = Path("data") / filename
+
+    try: 
+        with open(file_path, "w", encoding="utf-8") as f:
+            json.dump(quiz_data, f, indent=4)
+
+        print(color_green(f"\n[SUCCESS] Quiz saved to: {file_path}"))
+
+        return str(file_path)
+    except IOError as e:
+        print(color_red(f"\n[CRITICAL ERROR] Could not save file {file_path}."))
+        print(f"\nDetails: {e}")
+
+        return None
