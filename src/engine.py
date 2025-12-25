@@ -4,6 +4,7 @@ from datetime import datetime
 from src.storage import save_leaderboard, load_leaderboard
 from src.colors import color_blue, color_cyan, color_green, color_magenta, color_red, color_yellow
 import time
+import random 
 
 def run_quiz(quiz_data):
     match_status = {
@@ -18,7 +19,13 @@ def run_quiz(quiz_data):
     total_questions = len(quiz_data["questions"])
     match_status["total_questions"] = total_questions
 
-    for question in quiz_data["questions"]:
+    question_list_original = quiz_data["questions"]
+
+    question_to_shuffle = question_list_original.copy()
+
+    random.shuffle(question_to_shuffle)
+
+    for question in question_to_shuffle:
         display_question(question)
 
         base_points = question["points"]
