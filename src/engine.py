@@ -3,6 +3,7 @@ import string
 from datetime import datetime
 from src.storage import save_leaderboard, load_leaderboard
 from src.colors import color_blue, color_cyan, color_green, color_magenta, color_red, color_yellow
+import time
 
 def run_quiz(quiz_data):
     match_status = {
@@ -20,21 +21,40 @@ def run_quiz(quiz_data):
     for question in quiz_data["questions"]:
         display_question(question)
 
+        base_points = question["points"]
+        time_limit = question.get("time_limit", 0)
+        
+
         option_list = question["options"]
+
+        start_time = time.perf_counter()
         user_answer = get_answer()
-        correct_answer = question["correctOption"]
+        end_time = time.perf_counter()
+
+        time_taken_raw = end_time - start_time
+        time_taken_rounded = round(time_taken_raw, 1)
 
         try:
             user_index = string.ascii_uppercase.index(user_answer)
         except ValueError:
             user_index = -1
 
-        if user_index == correct_answer:
-            match_status["correct_answers"] += 1
-            points = question["points"]
-            match_status["score"] += points
+        correct_answer = question["correctOption"]
 
-            print(color_green(f"\nCongratulations! Your answer is correct! \nExplanation: {question["explanation"]}"))
+        if user_index == correct_answer:
+            points_gained, feedback_message = calculate_score(base_points, time_taken_rounded, time_limit)
+            match_status["score"] += points_gained
+
+            match_status["correct_answers"] += 1
+
+            if points_gained > base_points:
+                print(color_green(f"CORRECT! {feedback_message}"))
+            elif points_gained == base_points:
+                print(color_green(f"Correct! Time taken: {time_taken_rounded}s."))
+            elif points_gained == 0 and time_limit > 0:
+                print(color_red(f"Attention! {feedback_message} (Points: 0)"))
+
+            print(color_green(f"\nExplanation: {question["explanation"]}"))
         else:
             match_status["incorrect_answers"] += 1
             penalty = question.get("penalty", 0)
@@ -89,3 +109,24 @@ def show_results(match_status):
         print(f"You need to see some key concepts.")
     else:
         print(f"\nToo bad, try again!")
+
+def calculate_score(base_points, time_taken, time_limit):
+    if time_limit == 0 or time_limit is None:
+        return (base_points, "Correct Answer, no time limit applied.")
+    
+    if time_taken > time_limit:
+        final_points = 0
+        message = f"Too slow! You took {time_taken:.1f}s, the limit was {time_limit}s."
+        return (final_points, message)
+    
+    bonus_time_threshold = time_limit / 2
+
+    if time_taken <= bonus_time_threshold:
+        bonus_points = 10
+        final_points = base_points + bonus_points
+        message = f"Rapid response! You got a bonus of {bonus_points} points."
+        return (final_points, message)
+    else:
+        final_points = base_points
+        message = f"Answer correct standard."
+        return (final_points, message)
