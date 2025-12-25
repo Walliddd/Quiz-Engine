@@ -75,7 +75,8 @@ def add_questions(quiz_data):
                 break
             if selection == "y":
                 print("Okay, let's proceed with adding a question...")
-                collect_question_details
+                collect_question_details(quiz_data)
+                break
             else:
                 message = "Invalid input"
                 error = color_red("[ERROR]")
@@ -89,8 +90,60 @@ def add_questions(quiz_data):
             break
 
 def collect_question_details(quiz_data):
-    while True:
-        question = input("Insert the Question: ")
 
-        if not question:
+    new_id = len(quiz_data["questions"])
+
+    while True:
+        question = get_validated_text(prompt="Insert the Question: ", error_msg="Question cannot be empty.")
+
+        category = get_validated_text(prompt="Insert the Category name: ", error_msg="Category cannot be empty.")
+
+        option_list = collect_options_with_limit()
+
+        correct_index = collect_and_validate_index(option_number = len(option_list))
+
+        explanation = collect_and_validate_text("Insert the Answer Explanation: ")
+
+        points = collect_and_validate_int("Points to be assigned (e.g. 10): ")
+
+        penalty = collect_and_validate_int("Penalty in case of Error (e.g. 2): ")
+            
+        time_limit = collect_and_validate_int("Time limit in seconds (e.g. 30): ")
+
+        new_question = {
+            "id": new_id,
+            "question": question,
+            "category": category,
+            "options": option_list,
+            "correct_index": correct_index,
+            "explanation": explanation,
+            "points": points,
+            "penalty": penalty,
+            "time_limit": time_limit
+        }
+
+    quiz_data["questions"].append(new_question)
+
+    print(color_green(f"\nQuestion added with success."))
+          
+def get_validated_text(prompt, error_msg):
+    while True:
+        user_input = input(prompt)
+
+        if user_input.strip() == "":
+            print(color_red(f"[ERROR] {error_msg}"))
             continue
+        else:
+            return user_input.strip()
+
+def collect_options_with_limit():
+    max_options = 5
+    min_options = 2
+
+    options = []
+
+    while True:
+        if len(options) >= max_options:
+            print(color_yellow(f"\nYou reached the max limit of {max_options} Options."))
+            break
+        prompt = f""
