@@ -60,6 +60,30 @@ def run_quiz_creator():
     
     quiz_complete = add_questions(new_quiz_data)
 
+    clear_screen()
+    print_header()
+
+    quiz_title = new_quiz_data.get("title")
+    num_questions = len(new_quiz_data["questions"])
+
+    print(color_yellow("\n--- QUIZ SUMMARY ---"))
+    print(f"Title: {quiz_title}")
+    print(f"Total Questions: {color_green(num_questions)}")
+    print(color_yellow(f"----------------------\n"))
+
+    while True:
+        confirmation = input("Do you want to save this quiz? (y/n): ").strip().lower()
+
+        if confirmation == "y":
+            print(color_green("\nConfirmation accepted. Proceeding with saving..."))
+            break
+        elif confirmation == "n":
+            print(color_red("\nSaving got cancelled by the user. Coming back to the main menu."))
+            return None
+        else:
+            print(color_red(f"[ERROR] Invalid input. Insert 'y' or 'n'."))
+
+
     saved_path = save_quiz_to_file(new_quiz_data)
 
     return new_quiz_data
@@ -78,7 +102,6 @@ def add_questions(quiz_data):
             if selection == "y":
                 print("Okay, let's proceed with adding a question...")
                 collect_question_details(quiz_data)
-                break
             else:
                 message = "Invalid input"
                 error = color_red("[ERROR]")
@@ -95,34 +118,33 @@ def collect_question_details(quiz_data):
 
     new_id = len(quiz_data["questions"])
 
-    while True:
-        question = get_validated_text(prompt="Insert the Question: ", error_msg="Question cannot be empty.")
+    question = get_validated_text(prompt="Insert the Question: ", error_msg="Question cannot be empty.")
 
-        category = get_validated_text(prompt="Insert the Category name: ", error_msg="Category cannot be empty.")
+    category = get_validated_text(prompt="Insert the Category name: ", error_msg="Category cannot be empty.")
 
-        option_list = collect_options_with_limit()
+    option_list = collect_options_with_limit()
 
-        correct_index = collect_and_validate_index(option_number = len(option_list))
+    correctOption = collect_and_validate_index(option_number = len(option_list))
 
-        explanation = get_validated_text("Insert the Answer Explanation: ")
+    explanation = get_validated_text("Insert the Answer Explanation: ")
 
-        points = collect_and_validate_int("Points to be assigned (e.g. 10): ")
+    points = collect_and_validate_int("Points to be assigned (e.g. 10): ")
 
-        penalty = collect_and_validate_int("Penalty in case of Error (e.g. 2): ")
+    penalty = collect_and_validate_int("Penalty in case of Error (e.g. 2): ")
             
-        time_limit = collect_and_validate_int("Time limit in seconds (e.g. 30): ")
+    time_limit = collect_and_validate_int("Time limit in seconds (e.g. 30): ")
 
-        new_question = {
-            "id": new_id,
-            "question": question,
-            "category": category,
-            "options": option_list,
-            "correct_index": correct_index,
-            "explanation": explanation,
-            "points": points,
-            "penalty": penalty,
-            "time_limit": time_limit
-        }
+    new_question = {
+        "id": new_id,
+        "question": question,
+        "category": category,
+        "options": option_list,
+        "correctOption": correctOption,
+        "explanation": explanation,
+        "points": points,
+        "penalty": penalty,
+        "time_limit": time_limit
+    }
 
     quiz_data["questions"].append(new_question)
 
