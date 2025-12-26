@@ -12,7 +12,12 @@ def run_quiz(quiz_data):
     the user takes to answer, calculates the points, and records the final result
 
     args:
-        quiz_data (dict): a dictionary containing the quiz structure, including the title and the list
+        quiz_data (dict):   a dictionary containing the quiz structure, including the title and the list
+                            of questions
+            
+    returns:
+        dict or None:       the final match status (score, correct/incorrect answers)
+                            it returns none if the process stops early (even though the current plan doesn't seem to allow for an easy stop)
     """
     match_status = {
 
@@ -41,21 +46,24 @@ def run_quiz(quiz_data):
 
         option_list = question["options"]
 
+        # time measurement
         start_time = time.perf_counter()
-        user_answer = get_answer()
+        user_answer = get_answer() # takes user input 
         end_time = time.perf_counter()
 
         time_taken_raw = end_time - start_time
         time_taken_rounded = round(time_taken_raw, 1)
-
+        
+        # conversion of the answer
         try:
             user_index = string.ascii_uppercase.index(user_answer)
         except ValueError:
-            user_index = -1
+            user_index = -1 # as invalid format
 
         correct_answer = question["correctOption"]
 
         if user_index == correct_answer:
+            # correct answer
             points_gained, feedback_message = calculate_score(base_points, time_taken_rounded, time_limit)
             match_status["score"] += points_gained
 
@@ -70,6 +78,7 @@ def run_quiz(quiz_data):
 
             print(color_green(f"\nExplanation: {question["explanation"]}"))
         else:
+            # wrong answer
             match_status["incorrect_answers"] += 1
             penalty = question.get("penalty", 0)
             match_status["score"] -= penalty
@@ -98,6 +107,14 @@ def run_quiz(quiz_data):
     return match_status
 
 def show_results(match_status):
+    """
+    this function show a summary of the results on the screen when the quiz ends
+
+    it calculates the total score, the number of correct/incorrect answers, and gives some text feedback based on how many answers were right
+
+    args:
+        match_status (dict): a dictionary containing score, correct_answers, incorrect_answers, and total_questions
+    """
     clear_screen()
     print_header()
     print(color_blue("\n-") + color_blue("-") *34)
@@ -125,6 +142,18 @@ def show_results(match_status):
         print(f"\nToo bad, try again!")
 
 def calculate_score(base_points, time_taken, time_limit):
+    """
+    this function calculates the final points for a correct answer
+    it also adds bonus points or considers penalties based on the time limit, if there is one
+
+    args:
+        base_points (int): the points given for the correct answer without time bonuses or penalties
+        time_taken (float): the time user spent answering in seconds
+        time_limit (int): the maximum time limit to get the bonus in seconds
+
+    returns:
+        tuple[int, str]: a pair containing (final_points, feedback_message)
+    """
     if time_limit == 0 or time_limit is None:
         return (base_points, "Correct Answer, no time limit applied.")
     
