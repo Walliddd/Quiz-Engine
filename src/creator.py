@@ -168,12 +168,14 @@ def collect_question_details(quiz_data):
     returns:
         None:       the function changes the 'quiz_data' dictionary directly
     """
-    # text fields collection
     new_id = len(quiz_data["questions"])
 
+    # text fields collection
     question = get_validated_text(prompt="Insert the Question: ", error_msg="Question cannot be empty.")
 
     category = get_validated_text(prompt="Insert the Category name: ", error_msg="Category cannot be empty.")
+
+    explanation = get_validated_text("Insert the Answer Explanation: ")
 
     # option collection
     option_list = collect_options_with_limit()
@@ -181,14 +183,15 @@ def collect_question_details(quiz_data):
     # correct option collection
     correctOption = collect_and_validate_index(option_number = len(option_list))
 
-    explanation = get_validated_text("Insert the Answer Explanation: ")
+    # positive values collection
 
     points = collect_and_validate_int("Points to be assigned (e.g. 10): ", allow_zero = False)
 
     penalty = collect_and_validate_int("Penalty in case of Error (e.g. 2): ", allow_zero = False)
-            
+    
     time_limit = collect_and_validate_int("Time limit in seconds (e.g. 30): ", allow_zero = False)
 
+    # question creation
     new_question = {
         "id": new_id,
         "question": question,
@@ -206,6 +209,18 @@ def collect_question_details(quiz_data):
     print(color_green(f"\nQuestion added with success."))
           
 def get_validated_text(prompt, error_msg):
+    """
+    this function asks the user for input until they give a text that is not empty
+
+    the function keeps asking until the user types something that is not just blank spaces
+
+    args:
+        prompt (str): the message shown to the user before asking for input
+        error_msg (str): the error message printed if the input is empty
+    
+    returns:
+        str: the user's input, with any spaces at the beginning or end removed
+    """
     while True:
         user_input = input(prompt)
 
@@ -216,25 +231,38 @@ def get_validated_text(prompt, error_msg):
             return user_input.strip()
 
 def collect_options_with_limit():
+    """
+    this function interactively collects a list of answer options, following set minimum and maximum limits
+
+    the user must enter at least 2 options,  and can enter up to 5 options maximum
+
+    returns:
+        list: a list of strings that contains the options the user entered
+    """
+
     max_options = 5
     min_options = 2
 
     options = []
 
     while True:
+        # check if maximum limit has been reached
         if len(options) >= max_options:
             print(color_yellow(f"\nYou reached the max limit of {max_options} Options."))
             break
-
+        
+        # new option collection
         prompt = f"Insert the Option #{len(options) + 1}: "
         new_option = get_validated_text(prompt, "The option cannot be empty.")
         options.append(new_option)
 
+        # request if wants to continue, only if the minimum has been reached
         if len(options) >= min_options:
             add_more = input("Do you want to add another option? (y/n): ").strip().lower()
             if add_more == "n":
                 break
-        
+    
+    # checks if option minimum has been reached
     if len(options) < min_options:
         print(color_red(f"[ERROR] At least {min_options} are required."))
         return collect_options_with_limit()
@@ -242,19 +270,32 @@ def collect_options_with_limit():
     return options
 
 def collect_and_validate_index(option_number):
+    """
+    this function asks the user to enter the index (starting from 1) of the correct answer
+    it checks if this index is valid based on the total number of options given
+
+    args:
+        option_number (int): the total number of options available (e.g., 4 if there are 4 options)
+
+    returns:
+        int: the index of the correct answer, formatted for python (starting from 0) 
+    """
     print(color_blue(f"The input must be between 1 and {option_number}."))
 
     while True:
         input_str = input(f"Insert the index of the correct answer (e.g. 1, 2, ...): ")
 
         try:
+            # it trys to convert the input in an integer 
             user_choice_base1 = int(input_str)
         except ValueError:
             print(color_red(f"Invalid input. Enter an integer."))
             continue
-
+        
+        # conversion from base 1 to base 0
         python_index = user_choice_base1 - 1
 
+        # option validation
         if 0 <= python_index < option_number:
             print(color_green(f"[SUCCESS] The converted index is valid."))
 
@@ -265,6 +306,9 @@ def collect_and_validate_index(option_number):
             continue
 
 def collect_and_validate_int(prompt, allow_zero):
+    """
+    this function asks the user
+    """
     while True:
         input_str = input(prompt)
 
@@ -282,6 +326,17 @@ def collect_and_validate_int(prompt, allow_zero):
         return value
     
 def collect_and_validate_index(option_number):
+    """
+    this function asks the user for a whole number (integer). 
+    it checks if the input has the correct format and if the number is positive
+
+    args:
+        prompt (str): the message shown to the user to ask for the value
+        allow_zero (bool): if true, the number 0 is okay. if false, the number must be greater than 0
+
+    returns:
+        int: the valid whole number entered by the user
+    """
     instructions = f"The correct answer is one of {option_number} options. Insert the number (1 to {option_number}): "
 
     while True:
@@ -295,6 +350,7 @@ def collect_and_validate_index(option_number):
 
         python_index = choice_base1 - 1
 
+        # check if the value is positive
         if 0 <= python_index < option_number:
             print(color_green(f"[SUCCESS] Correct index registered."))
 
