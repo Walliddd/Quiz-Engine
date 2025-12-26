@@ -7,6 +7,13 @@ import time
 import random 
 
 def run_quiz(quiz_data):
+    """
+    this function runs the main part of the quiz: it shows the questions in a mixed order, manages how long
+    the user takes to answer, calculates the points, and records the final result
+
+    args:
+        quiz_data (dict): a dictionary containing the quiz structure, including the title and the list
+    """
     match_status = {
 
         "score": 0,
