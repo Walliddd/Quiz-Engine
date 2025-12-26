@@ -2,12 +2,26 @@ import os
 import platform
 from typing import List, Dict
 import string
-from src.colors import color_red, color_green, color_yellow, color_blue, color_cyan, color_magenta
+from src.colors import color_red, color_yellow, color_blue, color_cyan
 
 def print_welcome():
+    """
+    this function prints a welcome message to the user when they start
+    (the function body is currently empty, just using 'pass')
+    """
     pass
 
 def show_menu(quiz_list):
+    """
+    this function show the list of available quizzes with their IDs and the option to create a new one
+
+    args:
+        quiz_list(list[dict]):  a list of dictionaries. each dictionary represents one quiz and must have
+                                the keys "id" and "title"
+        
+    returns:
+        int: the highest numerical ID available for selecting an existing quiz
+    """
     for quiz in quiz_list:
         print(f"[{quiz["id"]}] {quiz["title"]}")
     
@@ -17,6 +31,18 @@ def show_menu(quiz_list):
     return max_quiz_id
 
 def get_user_choice(max_option):
+    """
+    this function asks the user to select an existing quiz (using a number ID) or to create a new quiz (C)
+
+    it checks the input very carefully, making sure it is a valid whole number between 1 and the maximum
+    option number, or the letter 'C' 
+
+    args:
+        max_option (int ): the highest number of quizzes available to choose from
+
+    returns:
+        int or str:   the number ID of the selected quiz(int), or the string 'c' if the user chooses to create a quiz
+    """
     while True:
         clear_screen()
         print_header()
@@ -47,6 +73,9 @@ def get_user_choice(max_option):
             print(f"{error} {message}")
 
 def clear_screen():
+    """
+    this function cleans up the console based on the detected operating system
+    """
     if platform.system() == "Windows":
         os.system("cls")
 
@@ -54,6 +83,9 @@ def clear_screen():
         os.system("clear")
 
 def print_header(): # ascii art font name: 'Classy'
+    """
+    this function prints the ascii art with the logo of the program
+    """
     header = """
                                                                   
    ▄▄▄▄                         ▄▄▄▄▄▄▄                           
@@ -67,6 +99,15 @@ def print_header(): # ascii art font name: 'Classy'
     print(color_cyan(header))
 
 def display_question(question_data: Dict, question_number: int, total_questions: int):
+    """
+    this function shows the question text, the points it gives, 
+    and the answer options formatted with capital letters (A, B, C...)
+
+    args:
+        question_data (dict): a dictionary containing the question details
+        question_number (int): the step by step number of the questions being shown
+        total_questions (int): the total number of questions in the quiz
+    """
     print(color_blue("-") * 35)
     print(f"Question {question_number} of {total_questions} | Points {question_data.get("points", 1)}")
     print(color_blue("-") * 35)
@@ -86,6 +127,14 @@ def display_question(question_data: Dict, question_number: int, total_questions:
             print(f"{error} {message}")
 
 def get_answer():
+    """
+    this function asks the user for an answer using a capital letter
+
+    it keeps asking until the user types something that is not empty
+
+    returns:
+        str: the user's answer in capital letters
+    """
     while True:
         answer = input("Your answer (A, B, C, ...): ").strip().upper()
 
@@ -96,6 +145,14 @@ def get_answer():
         return answer
     
 def get_username():
+    """
+    this function asks the user to enter their username
+
+    it shows the welcome screen/header before asking for the name
+
+    returns:
+        str: the username provided by the user
+    """
     while True:
         clear_screen()
         print_header()
@@ -111,6 +168,14 @@ def get_username():
         return username
     
 def print_top_10(top_10_list):
+    """
+    this function shows the first 10 leaderboards results
+    the text is centered and formatted nicely
+
+    args:
+        top_10_list (list[dict]):   a list containing the top 10 score records, already sorted from
+                                    highest score to lowest
+    """
     clear_screen()
     print_header()
 
