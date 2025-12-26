@@ -307,7 +307,15 @@ def collect_and_validate_index(option_number):
 
 def collect_and_validate_int(prompt, allow_zero):
     """
-    this function asks the user
+    this function asks the user for a whole number (integer)
+    it checks if the input has the correct format  and if the number is positive
+
+    args: 
+        prompt (str): the message shown to the user to ask for the value
+        allow_zero (bool): if true, the number 0 is okay. if false, the number must be greater than 0
+
+    returns:
+        int: the valid whole number entered by the user
     """
     while True:
         input_str = input(prompt)
@@ -318,6 +326,7 @@ def collect_and_validate_int(prompt, allow_zero):
             print(color_red("[ERROR] You must insert a valid integer number."))
             continue
 
+        # checks if the value is strictly positive
         if allow_zero == False:
             if value <= 0:
                 print(color_red(f"[ERROR] The value must be strictly positive (>0)."))
@@ -360,6 +369,23 @@ def collect_and_validate_index(option_number):
             continue
 
 def sanitize_title_for_filename(title):
+    """
+    this function changes the title the user gives into a safe and valid string for a JSON filename
+
+    the steps are:
+    1. change everything to lowercase letters
+    2. replace all spaces with dashes (-)
+    3. remove bad characters often not allowed in filenames (like /, *, :, |)
+    4. remove any double dashes that appear next to each other
+    5. remove any dashes at the very start or very and of the name
+    6. add ".json" at the end
+
+    args:
+        title (str): the original title of the quiz
+
+    returns:
+        str: the final filename (example: "my-great-quiz.json")
+    """
     sanitized = title.lower()
 
     sanitized = sanitized.replace(" ", "-")
@@ -369,8 +395,10 @@ def sanitize_title_for_filename(title):
     for char in prohibited_chars:
         sanitized = sanitized.replace(char, "")
 
+    # double dashes management
     sanitized = sanitized.replace("--", "-")
 
+    # removes any dashes from start or end
     sanitized = sanitized.strip("-")
 
     filename = sanitized + ".json"
@@ -378,20 +406,39 @@ def sanitize_title_for_filename(title):
     return filename
 
 def save_quiz_to_file(quiz_data):
+    """
+    this function saves the quiz data (which is a dictionary) into a JSON file inside the 'data' folder
+
+    the name of the file is created by cleaning up the quiz title at first
+
+    args:
+        quiz_data (dict): the dictionary that has all the quiz data to be saved
+
+    returns:
+        str or None:    the full path of the saved file (as a text string) if it works
+                        it returns None if there is an error when trying to write the file
+    """
+
+    # recover the title (or fallback)
     title = quiz_data.get("title", "untitled_quiz")
 
+    # generate a secure filename
     filename = sanitize_title_for_filename(title)
 
+    # create a complete path
     file_path = Path("data") / filename
 
     try: 
+        # opens the file in writing with utf-8 decoding
         with open(file_path, "w", encoding="utf-8") as f:
+            # saves the dictionary as JSON formatted
             json.dump(quiz_data, f, indent=4)
 
         print(color_green(f"\n[SUCCESS] Quiz saved to: {file_path}"))
 
         return str(file_path)
     except IOError as e:
+        # manages eventual error in writing (such as perms, disc full, etc...)
         print(color_red(f"\n[CRITICAL ERROR] Could not save file {file_path}."))
         print(f"\nDetails: {e}")
 
