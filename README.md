@@ -1,3 +1,6 @@
+# Quiz Engine 
+> **Quiz Engine** is an individual project developed
+
 ## Current Progress:
 - [x] Initial project architecture
 - [x] JSON Quiz schema definition

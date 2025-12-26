@@ -11,12 +11,27 @@ difficulty_map = {
 }
 
 def run_quiz_creator():
+    """
+    start the interactive process to make a new quiz using the command line interface
+
+    the function helps the user collect the following informations:
+        1. quiz title (it cannot be empty)
+        2. difficulty (easy, medium, hard)
+        3. questions, options, correct answers, and related details (points, time limit)
+
+    after creating the questions, show a summary and ask if the user wants to save it
+
+    returns:
+    dict or None:   a dictionary with all the quiz data if saving is confirmed and works well.
+                    it returns None if the user chooses to not to save the quiz
+    """
     clear_screen()
     print_header()
     print(color_blue("\n-") + color_blue("-") *34)
     print(color_green(f"Welcome into the Quiz Creator CLI!"))
     print(color_blue("-" * 35))
 
+    # title collection
     while True:
         title = input("\nWhat's the Title of the Quiz? ")
 
@@ -25,7 +40,8 @@ def run_quiz_creator():
             continue
         else:
             break
-
+    
+    # difficulty collection
     while True:
         print(f"\nWhat's the Difficulty of your Quiz?")
         print(f"1. Easy")
@@ -47,7 +63,8 @@ def run_quiz_creator():
             message = "'{difficulty_str}' is not a valid integer. Please enter only digits."
             print(f"{error} {message}")
             continue
-
+    
+    # initialization and question collection
     ensure_data_directory("data")
     
     final_difficulty = difficulty_map[difficulty]
@@ -58,6 +75,7 @@ def run_quiz_creator():
         "questions": []
         }
     
+    # question adding
     quiz_complete = add_questions(new_quiz_data)
 
     clear_screen()
@@ -65,7 +83,8 @@ def run_quiz_creator():
 
     quiz_title = new_quiz_data.get("title")
     num_questions = len(new_quiz_data["questions"])
-
+    
+    # review (summary) and confirm
     print(color_yellow("\n--- QUIZ SUMMARY ---"))
     print(f"Title: {quiz_title}")
     print(f"Total Questions: {color_green(num_questions)}")
@@ -89,7 +108,22 @@ def run_quiz_creator():
     return new_quiz_data
 
 def add_questions(quiz_data):
+    """
+    this function lets the user add one or more questions to the quiz dictionary
+
+    the function keeps running in a loop. it asks the user if they want to add a new question (y) or
+    stop adding questions (n). if the user chooses 'n', it checks if at least one question has been added
+
+    args:
+    quiz_data (dict):   the quiz dictionary that is being created
+                        it has a key called "questions" (which is an empty or partly filled list)
+    
+    returns:
+    none: the function changes the 'quiz_data' dictionary directly
+    
+    """
     while True:
+        # adding question management
         while True:
             print(color_blue("\n-") + color_blue("-") *34)
             print(color_green(f"Do you want to add Questions to your Quiz?"))
@@ -98,41 +132,62 @@ def add_questions(quiz_data):
             selection = input("Insert your answer (y/n): ").strip().lower()
 
             if selection == "n":
+                # if no questions to be added, quit cycle
                 break
             if selection == "y":
-                print("Okay, let's proceed with adding a question...")
+                print("\nOkay, let's proceed with adding a question...")
+                # questions details collection function call
                 collect_question_details(quiz_data)
             else:
                 message = "Invalid input"
                 error = color_red("[ERROR]")
                 print(f"{error} {message}")
                 continue
-        
+
+        # final check: if there is at least one question
         if len(quiz_data["questions"]) == 0:
             print(f"\nYou must insert at least one Question.")
+            # if there are no questions, ask to add one
             continue
         else:
+            # if there's at least one question, leave the cycle
             break
 
 def collect_question_details(quiz_data):
 
+    """
+    the function interactively collects all the needed information for one single question
+    (text, category, options, correct answers, points, limits) and adds it to the quiz
+
+    the question ID is given automatically based on how many questions are already in the quiz
+
+    args:
+        quiz_data:  the quiz dictionary being created. this dictionary is changed by adding the new question
+                    to the option list
+    
+    returns:
+        None:       the function changes the 'quiz_data' dictionary directly
+    """
+    # text fields collection
     new_id = len(quiz_data["questions"])
 
     question = get_validated_text(prompt="Insert the Question: ", error_msg="Question cannot be empty.")
 
     category = get_validated_text(prompt="Insert the Category name: ", error_msg="Category cannot be empty.")
 
+    # option collection
     option_list = collect_options_with_limit()
 
+    # correct option collection
     correctOption = collect_and_validate_index(option_number = len(option_list))
 
     explanation = get_validated_text("Insert the Answer Explanation: ")
 
-    points = collect_and_validate_int("Points to be assigned (e.g. 10): ")
+    points = collect_and_validate_int("Points to be assigned (e.g. 10): ", allow_zero = False)
 
-    penalty = collect_and_validate_int("Penalty in case of Error (e.g. 2): ")
+    penalty = collect_and_validate_int("Penalty in case of Error (e.g. 2): ", allow_zero = False)
             
-    time_limit = collect_and_validate_int("Time limit in seconds (e.g. 30): ")
+    time_limit = collect_and_validate_int("Time limit in seconds (e.g. 30): ", allow_zero = False)
 
     new_question = {
         "id": new_id,
@@ -209,7 +264,7 @@ def collect_and_validate_index(option_number):
             print(color_red("[ERROR] The number is an integer, but it's out of options range"))
             continue
 
-def collect_and_validate_int(prompt, error_msg, allow_zero):
+def collect_and_validate_int(prompt, allow_zero):
     while True:
         input_str = input(prompt)
 
