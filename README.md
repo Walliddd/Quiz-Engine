@@ -1,8 +1,55 @@
-# Quiz Engine 
-> **Quiz Engine** is an individual project developed
+# 🧠 Quiz Engine CLI
 
-## Current Progress:
-- [x] Initial project architecture
-- [x] JSON Quiz schema definition
-- [x] Dynamic data loading 
-- [x] Basic test script in 'main.py'
+> **Quiz Engine** is a solo project made only with Python. It is a Command Line Interface (CLI) application. Users can play interactive quizzes, make their own custom tests, and climb the high score list.
+
+This project was built using strict coding rules, without using any external, non-standard libraries (Zero Dependencies). This shows a strong understanding of programming logic and data handling.
+
+## ✨ Main Features
+
+*   **🎮 Interactive Game Engine:** Smooth gameplay on the terminal. It manages time, calculates scores with speed bonuses, and handles penalties for wrong answers.
+*   **🛠️ Built-in Quiz Creator:** A step-by-step guide that lets users create new quizzes, define questions, options, and difficulty settings, saving everything automatically.
+*   **🎨 Colorful Interface:** It uses ANSI escape codes for a nice and readable user experience (without libraries like `colorama`).
+*   **💾 Data Saving:** All quizzes and score lists are saved and loaded automatically using JSON files.
+*   **🏆 Leaderboard System:** Tracks the best scores for every quiz, saving the username, score, and date.
+
+## 📂 Project Structure
+
+The code is split into modules to make it easy to maintain and grow:
+
+```text
+quiz-engine/
+│
+├── data/                 # Holds the quiz .json files and the leaderboard
+├── src/                  # Modular source code
+│   ├── ui_terminal.py    # Handles input/output and the User Interface (UI)
+│   ├── engine.py         # Game logic (scores, timers)
+│   ├── data_manager.py   # JSON parsing and file handling
+│   ├── colors.py         # Utility for ANSI colors
+│   └── storage.py        # Handles leaderboard saving
+│
+├── main.py               # The starting point of the application
+└── README.md             # Project documentation
+```
+
+## 📅 Progress Status
+
+The core of the project works now, and the main features are done.
+
+- [x] **Initial Project Structure**: Set up the folder structure and modules.
+- [x] **JSON Schema Definition**: Standard data structure for quizzes and questions.
+- [x] **Dynamic Data Loading**: Strong checking when reading JSON files from the `data/` folder.
+- [x] **Game Engine**: Logic for answering, timing, and score calculation.
+- [x] **User Interface (UI)**: Navigation menus and visual feedback using colors.
+- [x] **Quiz Creator**: Feature to add new quizzes from the CLI.
+- [x] **Leaderboard**: System to save and show the best scores.
+
+### 🔜 Next Steps (To-Do)
+- [ ] Clean up the code to make it easier to read (Complete Docstrings).
+- [ ] Add more checks for broken JSON files.
+- [ ] Implement a "Sudden Death" mode (Hardcore mode).
+
+## 👨‍💻 Author
+
+Project developed by **Wallid** for Midnight.
+
+*Development time tracked on WakaTime: ~50 hours.*
