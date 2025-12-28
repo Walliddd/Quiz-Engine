@@ -3,6 +3,7 @@ import string
 from datetime import datetime
 from src.storage import save_leaderboard, load_leaderboard
 from src.colors import color_blue, color_cyan, color_green, color_magenta, color_red, color_yellow
+from src.ui_terminal import print_header, clear_screen
 import time
 import random 
 
@@ -39,6 +40,8 @@ def run_quiz(quiz_data):
 
     for i, question in enumerate(question_to_shuffle):
         question_number = i + 1
+        clear_screen()
+        print_header()
         display_question(question, question_number, total_questions)
 
         base_points = question["points"]

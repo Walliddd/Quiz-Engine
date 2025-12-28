@@ -66,18 +66,23 @@ def save_leaderboard(data_list):
         none: it prints a success message or an error message to the console 
     """
     leaderboard_file = _get_storage_path()
-    leaderboard_directory = leaderboard_file
-    leaderboard_directory.mkdir(parents=True, exist_ok=True)
+    leaderboard_directory = leaderboard_file.parent
     try:
-        with leaderboard_file.open("w") as f:
-            json.dump(data_list, f, indent=4)
+        leaderboard_directory.mkdir(parents=True, exist_ok=True)
+        try:
+            with leaderboard_file.open("w") as f:
+                json.dump(data_list, f, indent=4)
 
-        message = "Leaderboard data saved successfully."
-        success = color_green("[SUCCESS]")
-        print("{success} {message}")
+            message = "Leaderboard data saved successfully."
+            success = color_green("[SUCCESS]")
+            print("{success} {message}")
+        except Exception as e:
+            error = color_red("[ERROR]")
+            message = f"Could not save Leaderboard data: {e}"
+            print(f"{error} {message}")
     except Exception as e:
         error = color_red("[ERROR]")
-        message = f"Could not save Leaderboard data: {e}"
+        message = f"Unable to create save directory {leaderboard_directory}: {e}"
         print(f"{error} {message}")
 
 def display_top_10(quiz_name_filter):
