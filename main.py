@@ -97,10 +97,50 @@ def main_application_loop():
     this function is the main loop to run the quiz application engine
     """
 
-files = load_quiz_file()
+    ensure_data_directory("data")
 
-print(f"Quiz found: {files}")
+    available_quizzes = load_quiz_file()
 
-dati = load_quiz_data(files[0])
+    while True:
+        display_main_menu()
 
-print(dati["title"])
+        available_quizzes = load_quiz_file()
+
+        choice = input("\nEnter your choice (1-3): ").strip()
+
+        if choice == "1":
+            print(color_blue(f"\nStarting Quiz Creator..."))
+            run_quiz_creator()
+
+            available_quizzes = load_quiz_file()
+
+        elif choice == "2":
+            selected_file = select_quiz_to_play(available_quizzes)
+
+            if selected_file:
+                quiz_data = load_quiz_data(selected_file)
+
+                if quiz_data:
+                    quiz_title = quiz_data["title"]
+                    print(color_blue(f"\nStarting Quiz: {quiz_title}"))
+
+                    match_status = run_quiz(quiz_data)
+
+                    if match_status:
+                        handle_post_quiz_actions(quiz_title)
+        
+        elif choice == "3":
+            print(color_green(f"\nThank you for using the Quiz App. Goodbye!"))
+            sys.exit(0)
+
+        else:
+            print(color_red(f"[ERROR] Invalid choice. Please select 1, 2, or 3."))
+
+        input(f"\nPress Enter to return to the Main Menu")
+
+try:
+    ensure_data_directory("data")
+    main_application_loop()
+except KeyboardInterrupt:
+    print(color_red(f"\n\nApplication interrupted by user (Ctrl+C). Exiting."))
+    sys.exit(0)
