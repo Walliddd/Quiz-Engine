@@ -42,7 +42,7 @@ def run_quiz(quiz_data):
         question_number = i + 1
         clear_screen()
         print_header()
-        display_question(question, question_number, total_questions)
+        valid_options =display_question(question, question_number, total_questions)
 
         base_points = question["points"]
         time_limit = question.get("time_limit", 0)
@@ -52,7 +52,7 @@ def run_quiz(quiz_data):
 
         # time measurement
         start_time = time.perf_counter()
-        user_answer = get_answer() # takes user input 
+        user_answer = get_answer(valid_options) # takes user input 
         end_time = time.perf_counter()
 
         time_taken_raw = end_time - start_time

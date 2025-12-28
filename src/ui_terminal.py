@@ -117,34 +117,48 @@ def display_question(question_data: Dict, question_number: int, total_questions:
 
     options = question_data["options"]
     letters_uppercase = string.ascii_uppercase
+    valid_letters = []
 
     for index, option in enumerate(options):
         if index < len(letters_uppercase):
             letter = letters_uppercase[index]
             print(f"{letter}. {option}")
+            valid_letters.append(letter)
         else:
             message = f"Index '{index}' out of range A-Z"
             error = color_red("[ERROR]")
             print(f"{error} {message}")
 
-def get_answer():
+    return valid_letters    
+
+def get_answer(valid_options):
     """
     this function asks the user for an answer using a capital letter
 
     it keeps asking until the user types something that is not empty
 
+    args:
+        valid_options (list[str]):   a list of valid answer options (capital letters)
+
     returns:
         str: the user's answer in capital letters
     """
+    options_str = ", ".join(valid_options)
+
     while True:
-        answer = input("Your answer (A, B, C, ...): ").strip().upper()
+        answer = input(f"Your answer ({options_str}): ").strip().upper()
 
         if not answer:
             print("[WARN] Input cannot be empty. Please try again.")
             continue
 
-        return answer
-    
+        if answer in valid_options:
+            return answer
+        else:
+            message = f"'{answer}' is not a valid option. Please choose from: {options_str}"
+            error = color_red("[ERROR]")
+            print(f"{error} {message}")
+
 def get_username():
     """
     this function asks the user to enter their username
