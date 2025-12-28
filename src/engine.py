@@ -37,8 +37,9 @@ def run_quiz(quiz_data):
 
     random.shuffle(question_to_shuffle)
 
-    for question in question_to_shuffle:
-        display_question(question)
+    for i, question in enumerate(question_to_shuffle):
+        question_number = i + 1
+        display_question(question, question_number, total_questions)
 
         base_points = question["points"]
         time_limit = question.get("time_limit", 0)

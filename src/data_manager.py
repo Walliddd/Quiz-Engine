@@ -23,8 +23,12 @@ def load_quiz_file():
 
     for filename in all_files:
         if filename.endswith(".json"):
+            if filename == "leaderboard.json":
+                continue
+
             data = load_quiz_data(filename)
             is_valid = is_valid_quiz(data)
+            
             if is_valid:
                 quiz_files.append(filename)
             else:
