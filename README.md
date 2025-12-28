@@ -4,6 +4,11 @@
 
 This project was built using strict coding rules, without using any external, non-standard libraries (Zero Dependencies). This shows a strong understanding of programming logic and data handling.
 
+### 💡 A Personal Milestone
+
+**Quiz Engine** marks my **first full-cycle application development experience** built entirely from the ground up. The entire journey, from defining the architecture and managing complex data structures, to polishing the final user interface, has been an intensive, hands-on learning process. Every module was written and rigorously tested with the specific goal of demonstrating proficiency in core Python principles within a real-world context.
+
+
 ## ✨ Main Features
 
 *   **🎮 Interactive Game Engine:** Smooth gameplay on the terminal. It manages time, calculates scores with speed bonuses, and handles penalties for wrong answers.
@@ -11,6 +16,22 @@ This project was built using strict coding rules, without using any external, no
 *   **🎨 Colorful Interface:** It uses ANSI escape codes for a nice and readable user experience (without libraries like `colorama`).
 *   **💾 Data Saving:** All quizzes and score lists are saved and loaded automatically using JSON files.
 *   **🏆 Leaderboard System:** Tracks the best scores for every quiz, saving the username, score, and date.
+
+## 🚀 Clone & Run
+
+To get a local copy up and running, follow these simple steps:
+
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/Walliddd/Quiz-Engine
+    cd Quiz-Engine
+    ```
+
+2.  **Run the application:**
+    Since this project has **zero external dependencies** (only standard Python libraries), you can run it directly:
+    ```bash
+    python main.py
+    ```
 
 ## 📂 Project Structure
 
@@ -42,10 +63,10 @@ The core of the project works now, and the main features are done.
 - [x] **User Interface (UI)**: Navigation menus and visual feedback using colors.
 - [x] **Quiz Creator**: Feature to add new quizzes from the CLI.
 - [x] **Leaderboard**: System to save and show the best scores.
+- [x] **Docstrings** Clean up the code to make it easier to read.
+- [x] Add more checks for broken JSON files.
 
 ### 🔜 Next Steps (To-Do)
-- [ ] Clean up the code to make it easier to read (Complete Docstrings).
-- [ ] Add more checks for broken JSON files.
 - [ ] Implement a "Sudden Death" mode (Hardcore mode).
 
 ## 👨‍💻 Author

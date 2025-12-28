@@ -8,6 +8,12 @@ from src.colors import color_blue, color_red, color_yellow, color_green, color_c
 
 
 def display_main_menu():
+    """
+    this function shows the main menu to the user
+
+    returns:
+        None
+    """
     clear_screen()
     print_header()
     print(color_blue("\n" + "=" * 35))
@@ -21,6 +27,12 @@ def display_main_menu():
 def select_quiz_to_play(available_quizzes):
     """
     this funnction allows the user to select one quiz from the available list to play
+
+    args:
+        available_quizzes (list[str]): a list of strings with the names of the valid JSON quiz files
+    
+    returns:
+        str or None: the filename of the selected quiz, or None if the user wants to go back to the main menu
     """
 
     if not available_quizzes:
@@ -61,7 +73,13 @@ def select_quiz_to_play(available_quizzes):
 
 def load_selected_quiz(filename):
     """
-    this function loads quiz data from the specified file using data_manager
+    this function loads quiz data from the specified file using data_manager 
+
+    args:
+        filename (str): the name of the JSON file to load (it must be in 'data/')
+
+    returns:
+        dict or None: the content of the JSON file loaded as a python dictionary, or None if loading fails
     """
     try:
         quiz_data = load_quiz_data(filename)
@@ -76,6 +94,14 @@ def load_selected_quiz(filename):
 def handle_post_quiz_actions(quiz_title):
     """
     this function handles viewing the leaderboard after a quiz section
+
+    
+    args:
+        quiz_title (str): the title of the quiz just played
+
+    returns:
+        none
+
     """
 
     while True:
@@ -94,6 +120,12 @@ def handle_post_quiz_actions(quiz_title):
 def main_application_loop():
     """
     this function is the main loop to run the quiz application engine
+
+    args:
+        none    
+    
+    returns:
+        none
     """
 
     ensure_data_directory("data")
