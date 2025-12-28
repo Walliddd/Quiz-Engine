@@ -4,7 +4,7 @@ from src.engine import run_quiz
 from src.data_manager import load_quiz_file, ensure_data_directory, load_quiz_data
 from src.storage import load_leaderboard, save_leaderboard, display_top_10
 from src.ui_terminal import clear_screen, print_header, get_username
-from src.colors import color_blue, color_red, color_yellow, color_green
+from src.colors import color_blue, color_red, color_yellow, color_green, color_cyan
 
 
 def display_main_menu():
@@ -77,6 +77,20 @@ def handle_post_quiz_actions(quiz_title):
     """
     this function handles viewing the leaderboard after a quiz section
     """
+
+    while True:
+        print(f"\n--- POST QUIZ ACTIONS ---")
+        action = input(f"Do you want to view the Leaderboard for this quiz? (y/n): ").strip().lower()
+
+        if action == "y":
+            print(color_cyan(f"\nLoading Leaderboard for {quiz_title}..."))
+            display_top_10(quiz_title)
+            input(f"\nPress Enter to return to the Main Menu...")
+            break
+        if action == "n":
+            break
+        else:
+            print(color_red(f"\n[ERROR] Invalid input. Enter 'y' or 'n'."))
 
 def main_application_loop():
     """
