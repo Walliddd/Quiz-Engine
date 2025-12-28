@@ -85,7 +85,6 @@ def handle_post_quiz_actions(quiz_title):
         if action == "y":
             print(color_cyan(f"\nLoading Leaderboard for {quiz_title}..."))
             display_top_10(quiz_title)
-            input(f"\nPress Enter to return to the Main Menu...")
             break
         if action == "n":
             break

@@ -75,7 +75,7 @@ def save_leaderboard(data_list):
 
             message = "Leaderboard data saved successfully."
             success = color_green("[SUCCESS]")
-            print("{success} {message}")
+            print(f"{success} {message}")
         except Exception as e:
             error = color_red("[ERROR]")
             message = f"Could not save Leaderboard data: {e}"

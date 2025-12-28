@@ -175,7 +175,7 @@ def collect_question_details(quiz_data):
 
     category = get_validated_text(prompt="Insert the Category name: ", error_msg="Category cannot be empty.")
 
-    explanation = get_validated_text("Insert the Answer Explanation: ")
+    explanation = get_validated_text("Insert the Answer Explanation: ", error_msg="Explanation cannot be empty.")
 
     # option collection
     option_list = collect_options_with_limit()

@@ -11,6 +11,7 @@ def print_welcome():
     """
     pass
 
+
 def show_menu(quiz_list):
     """
     this function show the list of available quizzes with their IDs and the option to create a new one
@@ -183,7 +184,7 @@ def print_top_10(top_10_list):
         print(f"No results found on the Leaderboard.")
         return
     
-    print(color_blue(f"\n--- LEADERBOARD TOP 10 FOR {top_10_list[0]["quiz_name"]} ---"))
+    print(color_blue(f"\n--- LEADERBOARD TOP 10 FOR {top_10_list[0]["quiz_name"].upper()} ---"))
 
     for index, record in enumerate(top_10_list):
         print(f"\n{index + 1} - {record["username"]} - {record["quiz_name"]} - {record["score"]} - {record["date"]}")
