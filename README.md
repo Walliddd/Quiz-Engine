@@ -17,7 +17,7 @@ This project was built using strict coding rules, without using any external, no
 *   **💾 Data Saving:** All quizzes and score lists are saved and loaded automatically using JSON files.
 *   **🏆 Leaderboard System:** Tracks the best scores for every quiz, saving the username, score, and date.
 
-## 🚀 Clone & Run
+## 🚀 Clone & Run (Local Demo)
 
 To get a local copy up and running, follow these simple steps:
 
