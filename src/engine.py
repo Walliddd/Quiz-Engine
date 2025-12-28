@@ -2,7 +2,7 @@ from src.ui_terminal import display_question, get_answer, clear_screen, print_he
 import string
 from datetime import datetime
 from src.storage import save_leaderboard, load_leaderboard
-from src.colors import color_blue, color_cyan, color_green, color_magenta, color_red, color_yellow
+from src.colors import color_blue, color_green, color_magenta, color_red
 from src.ui_terminal import print_header, clear_screen
 import time
 import random 

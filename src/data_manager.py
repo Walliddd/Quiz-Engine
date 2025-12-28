@@ -80,6 +80,9 @@ def is_valid_quiz(data):
     if "title" not in data:
         return False
     
+    if "difficulty" not in data or not isinstance(data["title"], str):
+        return False
+    
     if "questions" not in data:
         return False
     
@@ -113,6 +116,45 @@ def is_valid_quiz(data):
             return False
         
         if not (0 <= question["correctOption"] < len(question["options"])):
+            return False
+        
+        if "id" not in question:
+            return False
+        
+        if not isinstance(question["id"], int):
+            return False
+        
+        if "explanation" not in question:
+            return False
+        
+        if not isinstance(question["explanation"], str):
+            return False
+        
+        if "points" not in question:
+            return False
+        
+        if not isinstance(question["points"], int):
+            return False
+        
+        if "penalty" not in question:
+            return False
+        
+        if not isinstance(question["penalty"], int):
+            return False
+        
+        if "time_limit" not in question:
+            return False
+        
+        if not isinstance(question["time_limit"], int):
+            return False
+        
+        if question["time_limit"] < 0:
+            return False
+        
+        if "category" not in question:
+            return False
+        
+        if not isinstance(question["category"], str):
             return False
     
     return True
