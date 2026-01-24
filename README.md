@@ -74,3 +74,11 @@ The core of the project works now, and the main features are done.
 Project developed by **Wallid** for Midnight.
 
 *Development time tracked on WakaTime: ~50 hours.*
+
+<br>
+<div align="center">
+<a target="_blank" href="https://hackatime-badge.hackclub.com/U092CKVRNBS/Quiz%20Engine">
+<img src="https://hackatime-badge.hackclub.com/U092CKVRNBS/Quiz%20Engine" alt="Quiz Engine Wakatime Badge" />
+</a>
+</div>
+<br>
