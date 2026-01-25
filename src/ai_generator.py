@@ -9,11 +9,26 @@ def run_ai_quiz_generation(api_key, topic):
     """
     This function generates a quiz using AI and returns the quiz data
     """
+    API_ENDPOINT = "https://ai.hackclub.com/proxy/v1/chat/completions"
+    HEADERS = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json"
+    }
+
+    prompt = f"Generate a quiz on the topic: {topic} with 12 multiple-choice questions. It must be as the structure: {\"title\": str, \"difficulty\": str, \"questions\": [{\"question\": str, \"options\": list, \"id\": int, \"correctOption\": int, \"explanation\": str, \"points\": int, \"penalty\": int, \"time_limit\": int, \"category\": str}]}"
+    payload = {
+        "model": "openai/gpt-oss-120b",
+        "messages": [
+                {"role": "system", "content": "You are a helpful assistant that generates quizzes."},
+                {"role": "user", "content": prompt}
+        ],
+        "temperature": 0.7,
+    }
     try:
         response = requests.post(
             url = API_ENDPOINT,
             headers = HEADERS,
-            json = PAYLOAD,
+            json = payload,
             timeout = 30
         )
 
@@ -23,7 +38,22 @@ def run_ai_quiz_generation(api_key, topic):
             except json.JSONDecodeError:
                 raise ValueError("Failed to parse AI response as JSON.")
             
-            if validate
+            if validate_ai_quiz_structure(quiz_data):
+                return quiz_data
+            else:
+                raise ValueError(color_red("[ERROR] AI-generated quiz data has an invalid structure."))
+            
+        elif response.status_code == 401 or response.status_code == 403:
+            raise ValueError(color_red("[ERROR] Authentication failed. Please check your API key."))
+        else:
+            raise ValueError(color_red(f"[ERROR] Error in AI service server. Status code: {response.status_code}"))
+        
+        raise ConnectionError(color_red(f"[ERROR] Net connection Error."))
+    
+    except requests.exceptions.RequestException as e:
+        raise ConnectionError(color_red(f"[ERROR] Connection error: {str(e)}"))
+    
+    return None
 
 
 def ai_generator():
