@@ -48,8 +48,12 @@ def run_ai_quiz_generation(api_key, topic):
         else:
             raise ValueError(color_red(f"[ERROR] Error in AI service server. Status code: {response.status_code}"))
     
+    except requests.exceptions.ConnectionError as e:
+        raise ConnectionError(color_red(f"[ERROR] Network/connection error: {str(e)}")) from e
+    except requests.exceptions.Timeout as e:
+        raise ConnectionError(color_red("[ERROR] The request to the AI service timed out.")) from e
     except requests.exceptions.RequestException as e:
-        raise requests.exceptions.RequestException(color_red(f"[ERROR] Connection error: {str(e)}"))
+        raise ConnectionError(color_red(f"[ERROR] An error occurred while connecting to the AI service: {str(e)}")) from e
     
     return None
 
@@ -69,10 +73,13 @@ def ai_generator():
             return None
     except ValueError as ve:
         print(color_red(str(ve)))
-    except requests.exceptions.RequestException as re:
-        print(color_red(f"[ERROR] Connection error: {str(re)}"))
+        return None
+    except ConnectionError as ce:
+        print(color_red(f"[ERROR] Connection error: {str(ce)}"))
+        return None
     except Exception as e:
         print(color_red(f"[ERROR] Unknown error: {str(e)}"))
+        return None
 
 
 
@@ -101,4 +108,49 @@ def validate_ai_quiz_structure(quiz_data):
     if "title" not in quiz_data or not isinstance(quiz_data["title"], str):
         return False
     
+    if "difficulty" not in quiz_data or not isinstance(quiz_data["difficulty"], str):
+        return False
     
+    if "questions" not in quiz_data or not isinstance(quiz_data["questions"], list) or not quiz_data["questions"]:
+        return False
+    
+    for question in quiz_data["questions"]:
+        if not isinstance(question, dict):
+            return False
+        
+        required_keys = ["question", "options", "id", "correctOption", "explanation", "points", "penalty", "time_limit", "category"]
+
+        if not all(key in question for key in required_keys):
+            return False
+        
+        if not isinstance(question["question"], str):
+            return False
+        
+        if not isinstance(question["question"], str):
+            return False
+        
+        if not isinstance(question["options"], list) or not (len(question["options"]) >= 2):
+            return False
+        
+        if not isinstance(question["correctOption"], int) or not (0<= question["correctOption"] < len(question["options"])):
+            return False
+        
+        if not isinstance(question["explanation"], str):
+            return False
+        
+        if not isinstance(question["points"], int) or question["points"] < 0:
+            return False
+        
+        if not isinstance(question["penalty"], int):
+            return False
+        
+        if not isinstance(question["time_limit"], int) or question["time_limit"] <= 0:
+            return False
+        
+        if not isinstance(question["category"], str):
+            return False
+        
+        if not isinstance(question["id"], int):
+            return False
+        
+    return True
