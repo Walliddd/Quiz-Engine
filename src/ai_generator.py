@@ -15,7 +15,7 @@ def run_ai_quiz_generation(api_key, topic):
         "Content-Type": "application/json"
     }
 
-    prompt = f"Generate a quiz on the topic: {topic} with 12 multiple-choice questions. It must be as the structure: {\"title\": str, \"difficulty\": str, \"questions\": [{\"question\": str, \"options\": list, \"id\": int, \"correctOption\": int, \"explanation\": str, \"points\": int, \"penalty\": int, \"time_limit\": int, \"category\": str}]}"
+    prompt = f"Generate a quiz on the topic: {topic} with 12 multiple-choice questions. It must be as the structure: {{\"title\": str, \"difficulty\": str, \"questions\": [{{\"question\": str, \"options\": list, \"id\": int, \"correctOption\": int, \"explanation\": str, \"points\": int, \"penalty\": int, \"time_limit\": int, \"category\": str}}]}}"
     payload = {
         "model": "openai/gpt-oss-120b",
         "messages": [
@@ -47,11 +47,9 @@ def run_ai_quiz_generation(api_key, topic):
             raise ValueError(color_red("[ERROR] Authentication failed. Please check your API key."))
         else:
             raise ValueError(color_red(f"[ERROR] Error in AI service server. Status code: {response.status_code}"))
-        
-        raise ConnectionError(color_red(f"[ERROR] Net connection Error."))
     
     except requests.exceptions.RequestException as e:
-        raise ConnectionError(color_red(f"[ERROR] Connection error: {str(e)}"))
+        raise requests.exceptions.RequestException(color_red(f"[ERROR] Connection error: {str(e)}"))
     
     return None
 
@@ -96,4 +94,11 @@ def validate_ai_quiz_structure(quiz_data):
     """
     This function validates the structure of the AI-generated quiz data.
     """
+    
+    if type(quiz_data) is not dict:
+        return False
+    
+    if "title" not in quiz_data or not isinstance(quiz_data["title"], str):
+        return False
+    
     
