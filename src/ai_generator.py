@@ -8,6 +8,17 @@ import requests
 def run_ai_quiz_generation(api_key, topic):
     """
     This function generates a quiz using AI and returns the quiz data
+
+    Args:
+        api_key: The API key for the AI service
+        topic: The topic for the quiz to be generated
+
+    Returns:
+        The validated quiz data as a dictionary, or None if an error occurs.
+
+    Raises:
+        ValueError: if JSON parsing fails or the structure is invalid
+        ConnectionError: if a network related error occurs during the request
     """
     API_ENDPOINT = "https://ai.hackclub.com/proxy/v1/chat/completions"
     HEADERS = {
@@ -61,6 +72,9 @@ def run_ai_quiz_generation(api_key, topic):
 def ai_generator():
     """
     This function is the main entry point for the AI quiz generation module
+
+    Returns: 
+        The generated quiz data as a dictionary, or None if generation fails.
     """
     try:
         key, topic = _get_api_key_from_user()
@@ -86,6 +100,12 @@ def ai_generator():
 def _get_api_key_from_user():
     """
     This function takes user input to get the API key for AI services
+
+    Returns:
+        A tuple containing the API key and quiz topic
+
+    Raises:
+        ValueError: if the API key or topic is empty
     """
     key = getpass.getpass("Please enter your AI service API key (it won't be stored): ").strip()
     if not key:
@@ -100,6 +120,12 @@ def _get_api_key_from_user():
 def validate_ai_quiz_structure(quiz_data):
     """
     This function validates the structure of the AI-generated quiz data.
+
+    Args:
+        quiz_data: the data returned by the AI service
+
+    Returns:
+        True if the structure is valid, False otherwise
     """
     
     if type(quiz_data) is not dict:
