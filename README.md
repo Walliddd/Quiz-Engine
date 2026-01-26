@@ -17,6 +17,10 @@ This project was built using strict coding rules, without using any external, no
 *   **💾 Data Saving:** All quizzes and score lists are saved and loaded automatically using JSON files.
 *   **🏆 Leaderboard System:** Tracks the best scores for every quiz, saving the username, score, and date.
 
+A new module, **`ai_generator.py`**, has been implemented to handle AI interactions. This feature leverages the power of the **Google Gemini API** to dynamically create quizzes based on user-provided topics.
+
+**Prerequisite:** To use this feature, you **must** provide a Google Gemini API Key. You can obtain one for free at [aistudio.google.com](https://aistudio.google.com/).
+
 ## 🚀 Clone & Run (Local Demo)
 
 To get a local copy up and running, follow these simple steps:
@@ -27,8 +31,14 @@ To get a local copy up and running, follow these simple steps:
     cd Quiz-Engine
     ```
 
-2.  **Run the application:**
-    Since this project has **zero external dependencies** (only standard Python libraries), you can run it directly:
+2.  **Install required dependency for AI functionality:**
+    The new AI generation feature requires the `requests` library for network operations.
+    ```bash
+    pip install requests
+    ```
+
+3.  **Run the application:**
+    Since the core project strictly avoids external dependencies, only install `requests` if you plan to use the AI feature. The rest of the application runs without it.
     ```bash
     python main.py
     ```
@@ -46,6 +56,7 @@ quiz-engine/
 │   ├── engine.py         # Game logic (scores, timers)
 │   ├── data_manager.py   # JSON parsing and file handling
 │   ├── colors.py         # Utility for ANSI colors
+│   └── ai_generator.py   # Handles connection and validation for AI Quiz Generation (Requires 'requests')
 │   └── storage.py        # Handles leaderboard saving
 │
 ├── main.py               # The starting point of the application
@@ -65,6 +76,7 @@ The core of the project works now, and the main features are done.
 - [x] **Leaderboard**: System to save and show the best scores.
 - [x] **Docstrings** Clean up the code to make it easier to read.
 - [x] Add more checks for broken JSON files.
+- [x] **AI Quiz Generation Implementation** (New: `ai_generator.py`, requires Google Gemini API Key and `requests`).
 
 ### 🔜 Next Steps (To-Do)
 - [ ] Implement a "Sudden Death" mode (Hardcore mode).

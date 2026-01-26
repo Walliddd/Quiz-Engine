@@ -174,10 +174,8 @@ def main_application_loop():
 
                 if saved_path is not None:
                     print(color_green(f"\nAI-generated quiz saved successfully as {saved_path}."))
-                    input(color_blue(f"\nPress ENTER to return to the Main Menu."))
                 else:
                     print(color_red(f"\n[ERROR] Failed to save the AI-generated quiz."))
-                    input(color_blue(f"\nPress ENTER to return to the Main Menu."))
 
 
         

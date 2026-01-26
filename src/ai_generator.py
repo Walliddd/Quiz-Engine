@@ -1,7 +1,7 @@
 import os
 import json
 import time
-from src.colors import color_red, color_green, color_blue, color_yellow, color_magenta
+from src.colors import color_red, color_green, color_blue, color_yellow, color_magenta, color_cyan
 import requests
 
 def run_ai_quiz_generation(api_key, topic):
@@ -157,6 +157,8 @@ def _get_api_key_from_user():
     Raises:
         ValueError: if the API key or topic is empty
     """
+    print(color_magenta("To generate a quiz using AI, an API key for the AI service is required.\n\n"))
+    print(color_cyan("ENTER A VALID GEMINI API KEY TO PROCEED.\n"))
     key = input("Please enter your AI service API key (it won't be stored): ").strip()
     if not key:
         raise ValueError(f"{color_red("[ERROR] API key cannot be empty.")}")
