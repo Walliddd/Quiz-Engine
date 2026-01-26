@@ -1,10 +1,11 @@
 import sys 
-from src.creator import run_quiz_creator
+from src.creator import run_quiz_creator, sanitize_title_for_filename, save_quiz_to_file
 from src.engine import run_quiz
 from src.data_manager import load_quiz_file, ensure_data_directory, load_quiz_data
 from src.storage import load_leaderboard, save_leaderboard, display_top_10
 from src.ui_terminal import clear_screen, print_header, get_username
 from src.colors import color_blue, color_red, color_yellow, color_green, color_cyan
+from src.ai_generator import ai_generator, validate_ai_quiz_structure
 
 
 def display_main_menu():
@@ -21,7 +22,8 @@ def display_main_menu():
     print(color_blue("=" * 35))
     print("1. Create a New Quiz")
     print("2. Play a Quiz")
-    print("3. Exit application")
+    print("3. Generate Quiz using AI")
+    print("4. Exit application")
     print(color_blue("-" * 35))
 
 def select_quiz_to_play(available_quizzes):
@@ -137,7 +139,7 @@ def main_application_loop():
 
         available_quizzes = load_quiz_file()
 
-        choice = input("\nEnter your choice (1-3): ").strip()
+        choice = input("\nEnter your choice (1-4): ").strip()
 
         if choice == "1":
             print(color_blue(f"\nStarting Quiz Creator..."))
@@ -159,13 +161,32 @@ def main_application_loop():
 
                     if match_status:
                         handle_post_quiz_actions(quiz_title)
-        
+
         elif choice == "3":
+            print(color_blue(f"Starting AI Quiz Generation..."))
+
+            quiz_data_ai = ai_generator()
+
+            if quiz_data_ai is not None:
+                ai_quiz_title = sanitize_title_for_filename(quiz_data_ai["title"])
+
+                saved_path = save_quiz_to_file(quiz_data_ai)
+
+                if saved_path is not None:
+                    print(color_green(f"\nAI-generated quiz saved successfully as {saved_path}."))
+                    input(color_blue(f"\nPress ENTER to return to the Main Menu."))
+                else:
+                    print(color_red(f"\n[ERROR] Failed to save the AI-generated quiz."))
+                    input(color_blue(f"\nPress ENTER to return to the Main Menu."))
+
+
+        
+        elif choice == "4":
             print(color_green(f"\nThank you for using the Quiz App. Goodbye!"))
             sys.exit(0)
 
         else:
-            print(color_red(f"[ERROR] Invalid choice. Please select 1, 2, or 3."))
+            print(color_red(f"[ERROR] Invalid choice. Please select 1, 2, 3, or 4."))
 
         input(f"\nPress Enter to return to the Main Menu")
 

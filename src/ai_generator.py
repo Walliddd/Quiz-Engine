@@ -2,7 +2,7 @@ import os
 import json
 import time
 import getpass
-from colors import color_red
+from src.colors import color_red
 import requests
 
 def run_ai_quiz_generation(api_key, topic):
