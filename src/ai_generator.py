@@ -2,7 +2,7 @@ import os
 import json
 import time
 import getpass
-from src.colors import color_red
+from src.colors import color_red, color_green, color_blue, color_yellow, color_magenta
 import requests
 
 def run_ai_quiz_generation(api_key, topic):
@@ -20,17 +20,48 @@ def run_ai_quiz_generation(api_key, topic):
         ValueError: if JSON parsing fails or the structure is invalid
         ConnectionError: if a network related error occurs during the request
     """
+    json_structure_example = json.dumps({
+        "title": "Topic Title",
+        "difficulty": "Medium",
+        "questions": [
+            {
+                "question": "Example question?",
+                "options": ["Option A", "Option B", "Option C", "Option D"],
+                "id": 0,
+                "correctOption": 1, 
+                "explanation": "Explanation here",
+                "points": 10,
+                "penalty": 5,
+                "time_limit": 20,
+                "category": "Topic Name"
+            }
+        ]
+    })
+
+    system_instruction = (
+        "You are a strict JSON generator for a quiz engine. "
+        "Output ONLY raw JSON data. Do not use Markdown formatting (no ```json). "
+        "Do not include any introductory text. "
+        f"Follow this exact JSON structure: {json_structure_example}"
+    )
+
     API_ENDPOINT = "https://ai.hackclub.com/proxy/v1/chat/completions"
     HEADERS = {
         "Authorization": f"Bearer {api_key}",
         "Content-Type": "application/json"
     }
 
-    prompt = f"Generate a quiz on the topic: {topic} with 12 multiple-choice questions. It must be as the structure: {{\"title\": str, \"difficulty\": str, \"questions\": [{{\"question\": str, \"options\": list, \"id\": int, \"correctOption\": int, \"explanation\": str, \"points\": int, \"penalty\": int, \"time_limit\": int, \"category\": str}}]}}"
+    prompt = (
+        f"Generate a quiz on the topic: '{topic}' with 12 multiple-choice questions. "
+        "Ensure 'correctOption' is the 0-based index of the correct answer in the 'options' list. "
+        "Ensure 'id' is a sequential integer starting from 0. "
+        "Vary the difficulty, points, and time_limit appropriately."
+    )
+
     payload = {
         "model": "openai/gpt-oss-120b",
         "messages": [
-                {"role": "system", "content": "You are a helpful assistant that generates quizzes."},
+                {"role": "system", "content": system_instruction},
                 {"role": "user", "content": prompt}
         ],
         "temperature": 0.7,
@@ -44,27 +75,38 @@ def run_ai_quiz_generation(api_key, topic):
         )
 
         if response.status_code == 200:
+            api_response = response.json()
             try:
-                quiz_data = response.json()
-            except json.JSONDecodeError:
-                raise ValueError("Failed to parse AI response as JSON.")
+                content_string = api_response["choices"][0]["message"]["content"]
+            except (KeyError, IndexError) as e:
+                raise ValueError("Unexpected API response format (missing choices/message)")
+            
+            if content_string.startswith("```json"):
+                content_string = content_string.replace("```json", "").replace("```", "")
+            elif content_string.startswith("```"):
+                content_string = content_string.replace("```", "")
+
+            content_string = content_string.strip()
+
+            try:
+                quiz_data = json.loads(content_string)
+            except json.JSONDecodeError as e:
+                print(color_yellow(f"[DEBUG] Raw AI Output that failed parsing:\n{content_string}"))
+                raise ValueError(color_red(f"[ERROR] Failed to parse AI response as JSON: {str(e)}"))
             
             if validate_ai_quiz_structure(quiz_data):
                 return quiz_data
             else:
+                print(color_yellow(f"[DEBUG] Invalid JSON structure received:\n{json.dumps(quiz_data, indent=2)}"))
                 raise ValueError(color_red("[ERROR] AI-generated quiz data has an invalid structure."))
             
-        elif response.status_code == 401 or response.status_code == 403:
+        elif response.status_code in [401, 403]:
             raise ValueError(color_red("[ERROR] Authentication failed. Please check your API key."))
         else:
-            raise ValueError(color_red(f"[ERROR] Error in AI service server. Status code: {response.status_code}"))
+            raise ValueError(color_red(f"[ERROR] Error in AI service server. Status code: {response.status_code}. Message: {response.text}"))
     
-    except requests.exceptions.ConnectionError as e:
-        raise ConnectionError(color_red(f"[ERROR] Network/connection error: {str(e)}")) from e
-    except requests.exceptions.Timeout as e:
-        raise ConnectionError(color_red("[ERROR] The request to the AI service timed out.")) from e
     except requests.exceptions.RequestException as e:
-        raise ConnectionError(color_red(f"[ERROR] An error occurred while connecting to the AI service: {str(e)}")) from e
+        raise ConnectionError(color_red(f"[ERROR] Network/connection error: {str(e)}")) from e
     
     return None
 
